@@ -1,0 +1,24 @@
+[package]
+name = "dmx-visualizer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+nusb = "0.1.9"
+dmx-messages = { path = "../dmx-messages" }
+
+[dependencies.postcard-rpc]
+version = "0.5.2"
+features = [
+    "use-std",
+    "raw-nusb",
+]
+
+
+[dependencies.tokio]
+version = "1.37.0"
+features = [
+    "rt-multi-thread",
+    "macros",
+    "time",
+]

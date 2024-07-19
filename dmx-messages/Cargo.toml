@@ -1,0 +1,19 @@
+[package]
+name = "dmx-messages"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde-big-array = "0.5.1"
+
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
+default-features = false
+
+[dependencies.postcard]
+version = "1.0"
+features = ["experimental-derive"]
+
+[dependencies.postcard-rpc]
+version = "0.5"
