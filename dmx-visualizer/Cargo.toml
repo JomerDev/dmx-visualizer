@@ -6,6 +6,12 @@ edition = "2021"
 [dependencies]
 nusb = "0.1.9"
 dmx-messages = { path = "../dmx-messages" }
+warp = "0.3.7"
+warp-embed = "0.5.0"
+rust-embed = { version = "8.5.0", features = ["warp", "tokio", "warp-ex"] }
+futures-util = "0.3.30"
+serde = "1.0.204"
+serde_json = "1.0.120"
 
 [dependencies.postcard-rpc]
 version = "0.5.2"
