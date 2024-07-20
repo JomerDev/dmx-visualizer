@@ -339,7 +339,6 @@ dependencies = [
  "serde",
  "serde-big-array",
  "serde_json",
- "ts-rs",
 ]
 
 [[package]]
@@ -1526,29 +1525,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2c9d3793400a45f954c52e73d068316d76b6f4e36977e3fcebb13a2721e80237"
 dependencies = [
  "crunchy",
-]
-
-[[package]]
-name = "ts-rs"
-version = "9.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b44017f9f875786e543595076374b9ef7d13465a518dd93d6ccdbf5b432dde8c"
-dependencies = [
- "serde_json",
- "thiserror",
- "ts-rs-macros",
-]
-
-[[package]]
-name = "ts-rs-macros"
-version = "9.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c88cc88fd23b5a04528f3a8436024f20010a16ec18eb23c164b1242f65860130"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.70",
- "termcolor",
 ]
 
 [[package]]

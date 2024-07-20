@@ -77,7 +77,6 @@ async fn run_warp(tx: Sender<DMXMessage>) {
 }
 
 async fn user_connected(ws: WebSocket, mut rx: Receiver<DMXMessage>) {
-
     // Split the socket into a sender and receive of messages.
     let (mut user_ws_tx, _) = ws.split();
 

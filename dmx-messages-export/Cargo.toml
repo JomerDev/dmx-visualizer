@@ -1,0 +1,8 @@
+[package]
+name = "dmx-messages-export"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ts-rs = { version = "9.0.1" }
+dmx-messages = { path = "../dmx-messages", features = [ "ts" ]}

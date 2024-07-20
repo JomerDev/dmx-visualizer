@@ -1,8 +1,8 @@
+import { type DMXMessage } from "../../exports/DMXMessage";
 
 const _rid = Symbol("[[rid]]");
 const _waiting = Symbol("[[waiting]]");
 const _sendQueue = Symbol("[[sendQueue]]");
-const _services = Symbol("[[services]]");
 
 
 export class Socket extends WebSocket {
@@ -25,16 +25,8 @@ export class Socket extends WebSocket {
         (window as any).wsocket = this;
 
         this.onmessage = (e: MessageEvent) => {
-            const data: ServiceResponse = JSON.parse(e.data);
-            if (data.request_id !== undefined){
-                if (this[_waiting][data.request_id]) {
-                    this[_waiting][data.request_id].resolve(data.response);
-                } else if(data.request_id === 0) {
-                    this.dispatchEvent(new CustomEvent(`DMXMessage`, {detail: data.response}));
-                } else {
-                    this[_services][data.service](data.response);
-                }
-            }
+            const data: DMXMessage = JSON.parse(e.data);
+            this.dispatchEvent(new CustomEvent(`DMXMessage`, {detail: data.channels}));
         }
 
         this.addEventListener("open", () => {
