@@ -208,7 +208,6 @@ dependencies = [
  "postcard-rpc",
  "serde",
  "serde-big-array",
- "serde_json",
 ]
 
 [[package]]

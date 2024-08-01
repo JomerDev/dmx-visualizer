@@ -14,7 +14,7 @@ use warp::Filter;
 use rust_embed::RustEmbed;
 
 #[derive(RustEmbed)]
-#[folder = "web\\dist"]
+#[folder = "web\\dist\\assets"]
 struct Static;
 
 #[tokio::main]
@@ -88,4 +88,6 @@ async fn user_connected(ws: WebSocket, mut rx: Receiver<DMXMessage>) {
             })
             .await;
     }
+
+    
 }

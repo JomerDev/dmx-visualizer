@@ -63,17 +63,17 @@ static EXECUTOR1: StaticCell<Executor> = StaticCell::new();
 static SHARED: Signal<CriticalSectionRawMutex, DMXMessage> = Signal::new();
 
 #[embassy_executor::main]
-async fn main(_spawner: Spawner) {
+async fn main(spawner: Spawner) {
     let p = embassy_rp::init(Default::default());
 
-    // let driver = usb::Driver::new(p.USB, Irqs);
-    // let mut config = example_config();
-    // config.manufacturer = Some("JomerDev");
-    // config.product = Some("dmx-reader");
-    // let buffers = ALL_BUFFERS.take();
-    // let (device, ep_in, ep_out) = configure_usb(driver, &mut buffers.usb_device, config);
-    // let dispatch = Dispatcher::new(&mut buffers.tx_buf, ep_in, Context {});
-    // let sender = dispatch.sender();
+    let driver = usb::Driver::new(p.USB, Irqs);
+    let mut config = example_config();
+    config.manufacturer = Some("JomerDev");
+    config.product = Some("dmx-reader");
+    let buffers = ALL_BUFFERS.take();
+    let (device, ep_in, ep_out) = configure_usb(driver, &mut buffers.usb_device, config);
+    let dispatch = Dispatcher::new(&mut buffers.tx_buf, ep_in, Context {});
+    let sender = dispatch.sender();
     
     let mut config = uart::Config::default();
     config.baudrate = 250_000;
@@ -86,9 +86,9 @@ async fn main(_spawner: Spawner) {
     
     defmt::info!("Startup");
 
-    // spawner.must_spawn(dispatch_task(ep_out, dispatch, &mut buffers.rx_buf));
+    spawner.must_spawn(dispatch_task(ep_out, dispatch, &mut buffers.rx_buf));
     // Run the USB device.
-    // unwrap!(spawner.spawn(usb_task(device)));
+    unwrap!(spawner.spawn(usb_task(device)));
     // Run the uart loop
     // unwrap!(spawner.spawn(uart_task(sender, uart)));
 
@@ -104,9 +104,11 @@ async fn main(_spawner: Spawner) {
     let Pio { mut common, sm0, .. } = Pio::new(p.PIO0, Irqs);
 
     let mut ws = Ws2812::new(&mut common, sm0, p.DMA_CH2, p.PIN_3);
-
+    let mut seq_no: u32 = 0;
     loop {
         let msg = SHARED.wait().await;
+        let _: Result<(), ()> = sender.publish::<DmxTopic>(seq_no, &msg).await;
+        seq_no += 1;
         // let rgb: [RGB<u8>; 170] = msg.channels.chunks_exact(3).map(|val| RGB8 { r: val[0], g: val[1], b: val[2] }).collect::<[RGB<u8>; 170]>().try_into().unwrap();
         let rgb: [RGB<u8>; 170] = array::from_fn(|i| {
             let idx = i * 3;
@@ -122,6 +124,11 @@ pub async fn usb_task(mut usb: UsbDevice<'static, Driver<'static, USB>>) {
     usb.run().await;
 }
 
+// #[embassy_executor::task]
+// pub async fn sender_task(sender: Sender<ThreadModeRawMutex, Driver<'static, USB>>) {
+//     usb.run().await;
+// }
+
 #[embassy_executor::task]
 async fn dispatch_task(
     ep_out: Endpoint<'static, USB, Out>,
@@ -133,7 +140,6 @@ async fn dispatch_task(
 
 #[embassy_executor::task]
 pub async fn uart_task(mut uart: Uart<'static, UART0, Async>) { // sender: Sender<ThreadModeRawMutex, Driver<'static, USB>>
-    // let mut seq_no: u32 = 0;
     let mut buf1: [u8; 515] = [0; 515];
     let mut buf2: [u8; 515] = [0; 515];
     let mut first = true;
@@ -157,7 +163,7 @@ pub async fn uart_task(mut uart: Uart<'static, UART0, Async>) { // sender: Sende
                     let _ = SHARED.signal(msg);
                     
                     // If either one of the marked lines is commented out, this line will await forever
-                    // let e: Result<(), ()> = sender.publish::<DmxTopic>(seq_no, &msg).await;
+                    
 
                     // defmt::info!("Sent {} {} {:?}", len, buf2.len(), e);
                     // seq_no += 1;

@@ -63,7 +63,6 @@ dependencies = [
  "postcard-rpc",
  "serde",
  "serde-big-array",
- "serde_json",
  "ts-rs",
 ]
 

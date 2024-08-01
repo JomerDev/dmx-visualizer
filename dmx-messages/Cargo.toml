@@ -5,7 +5,6 @@ edition = "2021"
 
 [dependencies]
 serde-big-array = "0.5.1"
-serde_json = "1.0.120"
 ts-rs = { version = "9.0.1", features = ["serde_json"], optional = true }
 
 [dependencies.serde]

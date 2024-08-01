@@ -20,7 +20,7 @@ export class Socket extends WebSocket {
         if( !str || str == "" ) {
             str = "localhost"
         }
-        super("wss://" + str + ":8080/ws");
+        super("ws://" + str + ":8080/ws");
 
         (window as any).wsocket = this;
 
