@@ -40,7 +40,7 @@ fixed = "1.27.0"
 postcard-rpc = { version = "0.5.1", features = ["defmt", "embassy-usb-0_2-server"] }
 serde-big-array = "0.5.1"
 
-dmx-messages = { path = "../dmx-messages" }
+dmx-messages = { path = "../dmx-messages", default-features = false }
 byteorder = { version = "1.4.*", default-features = false }
 
 
