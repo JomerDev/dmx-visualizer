@@ -37,6 +37,7 @@ async fn read_uart(tx: Sender<DMXMessage>) {
         loop {
             let res = sub.recv().await;
             if let Some(res) = res {
+                // println!("Has msg");
                 let _ = tx.send(res);
             }
         }

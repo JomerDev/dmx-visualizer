@@ -7,7 +7,7 @@
 <template>
     <div class="outer" >
         {num}/{value || 0}
-        <div class="inner" style:background-color={`rgba(255,0,0,${1/512*value})`}>
+        <div class="inner" style:background-color={`rgba(255,0,0,${1/255*value})`}>
         </div>
     </div>
 </template>

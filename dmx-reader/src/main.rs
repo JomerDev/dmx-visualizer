@@ -103,18 +103,18 @@ async fn main(spawner: Spawner) {
 
     let Pio { mut common, sm0, .. } = Pio::new(p.PIO0, Irqs);
 
-    let mut ws = Ws2812::new(&mut common, sm0, p.DMA_CH2, p.PIN_3);
+    // let mut ws = Ws2812::new(&mut common, sm0, p.DMA_CH2, p.PIN_3);
     let mut seq_no: u32 = 0;
     loop {
         let msg = SHARED.wait().await;
         let _: Result<(), ()> = sender.publish::<DmxTopic>(seq_no, &msg).await;
         seq_no += 1;
         // let rgb: [RGB<u8>; 170] = msg.channels.chunks_exact(3).map(|val| RGB8 { r: val[0], g: val[1], b: val[2] }).collect::<[RGB<u8>; 170]>().try_into().unwrap();
-        let rgb: [RGB<u8>; 170] = array::from_fn(|i| {
-            let idx = i * 3;
-            RGB8 { r: msg.channels[idx], g: msg.channels[idx + 1], b: msg.channels[idx + 2] }
-        });
-        ws.write(&rgb).await;
+        // let rgb: [RGB<u8>; 512] = array::from_fn(|i| {
+        //     let idx = i;
+        //     RGB8 { r: msg.channels[idx], g: 0, b: 0 }
+        // });
+        // ws.write(&rgb).await;
     }
     
 }
@@ -165,7 +165,7 @@ pub async fn uart_task(mut uart: Uart<'static, UART0, Async>) { // sender: Sende
                     // If either one of the marked lines is commented out, this line will await forever
                     
 
-                    // defmt::info!("Sent {} {} {:?}", len, buf2.len(), e);
+                    // defmt::info!("Sent msg");
                     // seq_no += 1;
                 } else {
                     first = false;
